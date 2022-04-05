@@ -5,6 +5,9 @@ const gridElement = document.querySelector('.grid');
 //bottone avvio partita
 const elementButton = document.getElementById('button_custom');
 
+//messaggio game over
+const gameOverDiv = document.querySelector('.gameover_alert');
+
 //funzione al click del bottone
 elementButton.addEventListener('click', function () {
 
@@ -34,6 +37,9 @@ function createGrid(difficultyChoice) {
     //pulisco eventuale griglia già esistente
     gridElement.innerHTML = "";
 
+    //levo messagio game over
+    gameOverDiv.classList.add('d_none');
+
     let cellsNumber;
 
     let classToAdd;
@@ -52,73 +58,94 @@ function createGrid(difficultyChoice) {
         cellElement.classList.add('width_7');
         cellsNumber = 7;
     }
-    
+
     //stampo in grid i miei elementi
     for (let i = 1; i <= cellsNumber; i++) {
 
-    //elemento cella
-    const cellElement = document.createElement('div');
-    
-    //aggiungo classe css
-    cellElement.classList.add('cell');
-    cellElement.classList.add(classToAdd);
+        //elemento cella
+        const cellElement = document.createElement('div');
+
+        //aggiungo classe css
+        cellElement.classList.add('cell');
+        cellElement.classList.add(classToAdd);
 
 
-    //aggiungo numero celle
-    cellElement.innerHTML = i;
+        //aggiungo numero celle
+        cellElement.innerHTML = i;
 
-    //inserisco elemento cella in griglia
-    gridElement.append(cellElement);
+        //inserisco elemento cella in griglia
+        gridElement.append(cellElement);
     }
-    
+
 }
 
 
 function selectElements(difficultyChoice, divClass, bombsNumber) {
 
+    //seleziono i div creati classe selezionata
     const cells = document.querySelectorAll(divClass);
 
+    //creo array bombe
     const bombsArray = createBombsArray(difficultyChoice, bombsNumber);
 
+    console.log('le bombe sono nelle caselle:');
     console.log(bombsArray);
 
     //console.log(cells.length);
     //console.log(cells);
 
+    //contatore punti
     let pointCounter = 0;
 
+    //condizione affinche il gioco continui
     let isGameOver = false;
+
+
 
     for (let i = 0; i < cells.length; i++) {
         let cell = cells[i];
 
         //console.log(cell);
-
         if (isGameOver === false) {
-            cell.addEventListener('click', function () {
+
+            //celle reattive al click
+            cell.addEventListener('click', function activeCell() {
 
                 if (bombsArray.includes(parseInt(this.innerText))) {
                     console.log('hai preso una bomba sry');
                     this.innerHTML = '<i class="fa-solid fa-bomb"></i>';
-                    this.classList.toggle('bg_bomb');
+                    this.classList.add('bg_bomb');
 
                     isGameOver = true;
 
-                    alert(`Game over! Hai totalizzato ${pointCounter} punti`);
-                    
+                    //alert(`Game over! Hai totalizzato ${pointCounter} punti`);
+                    gameOverDiv.classList.remove('d_none');
+
                 } else {
                     this.innerHTML = "";
-                    this.classList.toggle('bg_safe');
+                    this.classList.add('bg_safe');
                     pointCounter = pointCounter + 1;
                     console.log(`Bomba evitata, sei a ${pointCounter} punti`);
                 }
-    
-                console.log(this, i);
-                console.log(this.innerText);
-                
-          
-              })
+
+                //console.log(this, i);
+                //console.log(this.innerText);
+
+
+            })
+        } else {
+            cell.removeEventListener('click', activeCell);
         }
+        /* else {
+         //for (let j= 0; j < cells.length; j++) {}
+ 
+         if (bombsArray.includes(parseInt(cell.innerText))) {
+             this.innerHTML = '<i class="fa-solid fa-bomb"></i>';
+             this.classList.add('bg_bomb');
+ 
+ 
+         }
+     } */
     }
 }
 
@@ -141,7 +168,7 @@ function createBombsArray(difficultyChoice, bombsNumber) {
 
     //inizializzo array bombe
     while (outputArray.length < bombsNumber) {
-        const arrayItem = getRndInteger(1, cellsNumber) 
+        const arrayItem = getRndInteger(1, cellsNumber)
 
         if (!outputArray.includes(arrayItem)) {
             outputArray.push(arrayItem);
@@ -152,7 +179,7 @@ function createBombsArray(difficultyChoice, bombsNumber) {
 }
 
 function getRndInteger(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) ) + min;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 
