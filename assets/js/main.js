@@ -85,10 +85,14 @@ function selectElements(difficultyChoice, divClass, bombsNumber) {
     //console.log(cells.length);
     //console.log(cells);
 
+    let pointCounter = 0;
+
     for (let i = 0; i < cells.length; i++) {
         let cell = cells[i];
 
         //console.log(cell);
+
+        
 
         cell.addEventListener('click', function () {
 
@@ -96,12 +100,13 @@ function selectElements(difficultyChoice, divClass, bombsNumber) {
                 console.log('hai preso una bomba');
                 this.innerHTML = '<i class="fa-solid fa-bomb"></i>';
                 this.classList.toggle('bg_bomb');
-                alert('Game over! Hai preso una bomba')
+                alert(`Game over! Hai totalizzato ${pointCounter} punti`);
                 
             } else {
                 this.innerHTML = "";
                 this.classList.toggle('bg_safe');
-                
+                pointCounter = pointCounter + 1;
+                console.log(`Bomba evitata, sei a ${pointCounter} punti`);
             }
 
             console.log(this, i);
