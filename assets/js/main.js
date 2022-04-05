@@ -109,7 +109,7 @@ function selectElements(difficultyChoice, divClass, bombsNumber) {
         if (isGameOver === false) {
 
             //celle reattive al click
-            cell.addEventListener('click', function activeCell() {
+            cell.addEventListener('click', function () {
 
                 if (bombsArray.includes(parseInt(this.innerText))) {
                     console.log('hai preso una bomba sry');
@@ -142,18 +142,9 @@ function selectElements(difficultyChoice, divClass, bombsNumber) {
 
             })
         } else {
-            cell.removeEventListener('click', activeCell);
+            //cell.removeEventListener('click', activeCell);
         }
-        /* else {
-         //for (let j= 0; j < cells.length; j++) {}
- 
-         if (bombsArray.includes(parseInt(cell.innerText))) {
-             this.innerHTML = '<i class="fa-solid fa-bomb"></i>';
-             this.classList.add('bg_bomb');
- 
- 
-         }
-     } */
+
     }
 }
 
