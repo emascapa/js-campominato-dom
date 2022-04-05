@@ -118,8 +118,16 @@ function selectElements(difficultyChoice, divClass, bombsNumber) {
 
                     isGameOver = true;
 
+                    for (let j = 0; j < cells.length; j++) {
+                        if (bombsArray.includes(parseInt(cells[j].innerText))) {
+                            cells[j].innerHTML = '<i class="fa-solid fa-bomb"></i>';
+                            cells[j].classList.add('bg_bomb');
+                        }
+                    }
+
                     //alert(`Game over! Hai totalizzato ${pointCounter} punti`);
                     gameOverDiv.classList.remove('d_none');
+                    gameOverDiv.innerHTML = `<h2>Hai perso sry. Hai totalizzato ${pointCounter} punti</h2>`
 
                 } else {
                     this.innerHTML = "";
@@ -174,6 +182,8 @@ function createBombsArray(difficultyChoice, bombsNumber) {
             outputArray.push(arrayItem);
         }
     }
+
+    outputArray.sort(function(a, b){return a-b});
 
     return outputArray;
 }
