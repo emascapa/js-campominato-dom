@@ -16,10 +16,10 @@ elementButton.addEventListener('click', function () {
         //console.log(createBombsArray('easy', 16));
     } else if (inputChoice === 2) {
         createGrid('medium');
-        selectElements('.cell');
+        selectElements('medium', '.cell', 16);
     } else if (inputChoice === 3) {
         createGrid('difficult');
-        selectElements('.cell');
+        selectElements('difficult', '.cell', 16);
     }
 
 })
@@ -94,8 +94,14 @@ function selectElements(difficultyChoice, divClass, bombsNumber) {
 
             if (bombsArray.includes(parseInt(this.innerText))) {
                 console.log('hai preso una bomba');
+                this.innerHTML = '<i class="fa-solid fa-bomb"></i>';
+                this.classList.toggle('bg_bomb');
+                alert('Game over! Hai preso una bomba')
+                
             } else {
-                this.classList.toggle('clicked');
+                this.innerHTML = "";
+                this.classList.toggle('bg_safe');
+                
             }
 
             console.log(this, i);
