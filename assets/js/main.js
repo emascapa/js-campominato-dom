@@ -33,6 +33,10 @@ elementButton.addEventListener('click', function () {
 
 
 //funzione crea griglia
+/**
+ * crea griglia in base alla difficoltà inserita
+ * @param {string} difficultyChoice seleziona difficoltà
+ */
 function createGrid(difficultyChoice) {
     //pulisco eventuale griglia già esistente
     gridElement.innerHTML = "";
@@ -80,6 +84,12 @@ function createGrid(difficultyChoice) {
 }
 
 
+/**
+ * crea elementi cella reattivi
+ * @param {string} difficultyChoice livello di difficoltà da dichiarare
+ * @param {string} divClass selezionare il tipo di elemento che riceverà la proprietà
+ * @param {number} bombsNumber numero di bombe nel gioco
+ */
 function selectElements(difficultyChoice, divClass, bombsNumber) {
 
     //seleziono i div creati classe selezionata
@@ -106,48 +116,52 @@ function selectElements(difficultyChoice, divClass, bombsNumber) {
         let cell = cells[i];
 
         //console.log(cell);
-        if (isGameOver === false) {
 
-            //celle reattive al click
-            cell.addEventListener('click', function () {
+        //celle reattive al click
+        cell.addEventListener('click', function () {
 
-                if (bombsArray.includes(parseInt(this.innerText))) {
-                    console.log('hai preso una bomba sry');
-                    this.innerHTML = '<i class="fa-solid fa-bomb"></i>';
-                    this.classList.add('bg_bomb');
 
-                    isGameOver = true;
 
-                    for (let j = 0; j < cells.length; j++) {
-                        if (bombsArray.includes(parseInt(cells[j].innerText))) {
-                            cells[j].innerHTML = '<i class="fa-solid fa-bomb"></i>';
-                            cells[j].classList.add('bg_bomb');
-                        }
+            //se la cella corrisponde a una bomba si colora e game over
+            if (bombsArray.includes(parseInt(this.innerText))) {
+                console.log('hai preso una bomba sry');
+                this.innerHTML = '<i class="fa-solid fa-bomb"></i>';
+                this.classList.add('bg_bomb');
+
+                isGameOver = true;
+
+
+                //coloro le altre bombe dato che il gioco è finito
+                for (let j = 0; j < cells.length; j++) {
+                    if (bombsArray.includes(parseInt(cells[j].innerText))) {
+                        cells[j].innerHTML = '<i class="fa-solid fa-bomb"></i>';
+                        cells[j].classList.add('bg_bomb');
                     }
-
-                    //alert(`Game over! Hai totalizzato ${pointCounter} punti`);
-                    gameOverDiv.classList.remove('d_none');
-                    gameOverDiv.innerHTML = `<h2>Hai perso sry. Hai totalizzato ${pointCounter} punti</h2>`
-
-                } else {
-                    this.innerHTML = "";
-                    this.classList.add('bg_safe');
-                    pointCounter = pointCounter + 1;
-                    console.log(`Bomba evitata, sei a ${pointCounter} punti`);
                 }
 
-                //console.log(this, i);
-                //console.log(this.innerText);
+                //alert(`Game over! Hai totalizzato ${pointCounter} punti`);
+                gameOverDiv.classList.remove('d_none');
+                gameOverDiv.innerHTML = `<h2>Hai perso sry. Hai totalizzato ${pointCounter} punti</h2>`
 
-
-            })
-        } else {
-            //cell.removeEventListener('click', activeCell);
-        }
-
+            }
+            //se la cella non è gia stata cliccata e non è una bomba succede questo (solo se il gioco non è finito)
+            else if ((!Number.isNaN(parseInt(this.innerText))) && isGameOver === false) {
+                this.innerHTML = "";
+                this.classList.add('bg_safe');
+                pointCounter = pointCounter + 1;
+                console.log(`Bomba evitata, sei a ${pointCounter} punti`);
+            }
+        })
     }
 }
 
+
+/**
+ * crea un array con gli indici delle bombe
+ * @param {string} difficultyChoice difficoltà del gioco da dichiarare
+ * @param {number} bombsNumber numero di bombe da creare
+ * @returns array con indice delle bombe ordinato
+ */
 function createBombsArray(difficultyChoice, bombsNumber) {
 
     //dichiaro array output
@@ -174,37 +188,21 @@ function createBombsArray(difficultyChoice, bombsNumber) {
         }
     }
 
-    outputArray.sort(function(a, b){return a-b});
+    outputArray.sort(function (a, b) { return a - b });
 
     return outputArray;
 }
 
+
+/**
+ * restituisce un numero intero casuale tra un monimo e massimo specificato in input
+ * @param {number} min minimo valore
+ * @param {*} max massimo valore
+ * @returns numero casuale
+ */
 function getRndInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 
 
-
-//funzione al click
-/* elementForm.addEventListener('submit', function (event) {
-    // Stop page reloading
-    event.preventDefault()
-
-    const inputChoice = parseInt(document.querySelector('select').value);
-
-    if (inputChoice === 1) {
-        createGrid('easy');
-        selectElements('.cell');
-
-    } else if (inputChoice === 2) {
-        createGrid('medium');
-        selectElements('.cell');
-
-    } else if (inputChoice === 3) {
-        createGrid('difficult');
-        selectElements('.cell');
-
-    }
-
-}) */
