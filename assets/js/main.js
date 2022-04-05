@@ -87,33 +87,38 @@ function selectElements(difficultyChoice, divClass, bombsNumber) {
 
     let pointCounter = 0;
 
+    let isGameOver = false;
+
     for (let i = 0; i < cells.length; i++) {
         let cell = cells[i];
 
         //console.log(cell);
 
-        
+        if (isGameOver === false) {
+            cell.addEventListener('click', function () {
 
-        cell.addEventListener('click', function () {
+                if (bombsArray.includes(parseInt(this.innerText))) {
+                    console.log('hai preso una bomba sry');
+                    this.innerHTML = '<i class="fa-solid fa-bomb"></i>';
+                    this.classList.toggle('bg_bomb');
 
-            if (bombsArray.includes(parseInt(this.innerText))) {
-                console.log('hai preso una bomba');
-                this.innerHTML = '<i class="fa-solid fa-bomb"></i>';
-                this.classList.toggle('bg_bomb');
-                alert(`Game over! Hai totalizzato ${pointCounter} punti`);
+                    isGameOver = true;
+
+                    alert(`Game over! Hai totalizzato ${pointCounter} punti`);
+                    
+                } else {
+                    this.innerHTML = "";
+                    this.classList.toggle('bg_safe');
+                    pointCounter = pointCounter + 1;
+                    console.log(`Bomba evitata, sei a ${pointCounter} punti`);
+                }
+    
+                console.log(this, i);
+                console.log(this.innerText);
                 
-            } else {
-                this.innerHTML = "";
-                this.classList.toggle('bg_safe');
-                pointCounter = pointCounter + 1;
-                console.log(`Bomba evitata, sei a ${pointCounter} punti`);
-            }
-
-            console.log(this, i);
-            console.log(this.innerText);
-            
-      
-          })
+          
+              })
+        }
     }
 }
 
