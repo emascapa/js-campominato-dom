@@ -120,16 +120,17 @@ function selectElements(difficultyChoice, divClass, bombsNumber) {
         //celle reattive al click
         cell.addEventListener('click', function () {
 
-
+            //this.condition = false;
 
             //se la cella corrisponde a una bomba si colora e game over
-            if (bombsArray.includes(parseInt(this.innerText))) {
+            if (bombsArray.includes(parseInt(this.innerText)) && isGameOver === false) {
                 console.log('hai preso una bomba sry');
                 this.innerHTML = '<i class="fa-solid fa-bomb"></i>';
                 this.classList.add('bg_bomb');
 
                 isGameOver = true;
 
+                //console.log(this.condition);
 
                 //coloro le altre bombe dato che il gioco è finito
                 for (let j = 0; j < cells.length; j++) {
@@ -141,16 +142,35 @@ function selectElements(difficultyChoice, divClass, bombsNumber) {
 
                 //alert(`Game over! Hai totalizzato ${pointCounter} punti`);
                 gameOverDiv.classList.remove('d_none');
-                gameOverDiv.innerHTML = `<h2>Hai perso sry. Hai totalizzato ${pointCounter} punti</h2>`
+                gameOverDiv.innerHTML = `<h2>Hai perso sry. Hai totalizzato ${pointCounter}/${cells.length - bombsNumber} punti</h2>`
 
             }
             //se la cella non è gia stata cliccata e non è una bomba succede questo (solo se il gioco non è finito)
-            else if ((!Number.isNaN(parseInt(this.innerText))) && isGameOver === false) {
-                this.innerHTML = "";
+            else if (!bombsArray.includes(parseInt(this.innerText)) && isGameOver === false && this.condition !== false) {
+                //this.innerHTML = "";
                 this.classList.add('bg_safe');
                 pointCounter = pointCounter + 1;
                 console.log(`Bomba evitata, sei a ${pointCounter} punti`);
-            }
+
+                //console.log(this.condition);
+                this.condition = false;
+                //console.log(this);
+
+                if (pointCounter === (cells.length - bombsNumber)) {
+                    gameOverDiv.classList.remove('d_none');
+                    gameOverDiv.innerHTML = `<h2>HAI VINTO! Hai totalizzato ${pointCounter}/${cells.length - bombsNumber} punti</h2>`;
+                    isGameOver = true;
+
+                         //coloro le altre bombe dato che il gioco è finito
+                    for (let j = 0; j < cells.length; j++) {
+                        if (bombsArray.includes(parseInt(cells[j].innerText))) {
+                            cells[j].innerHTML = '<i class="fa-solid fa-bomb"></i>';
+                            cells[j].classList.add('bg_bomb');
+                        }
+                    }
+                }
+
+            } 
         })
     }
 }
